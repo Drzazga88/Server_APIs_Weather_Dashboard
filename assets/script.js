@@ -19,62 +19,71 @@ const displayWeather = (city) => {
   localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
   getWeather(city)
-  .done((weatherData) => {
-    const cityName = weatherData.name;
-    const date = new Date ();
-    const weather = weatherData.weather[0];
-    const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
-    const temperature = weatherData.main.temp;
-    const humidity = weatherData.main.humidity;
-    const windSpeed = weatherData.wind.speed;
-    
-    // Update the HTML to display the information
-    document.getElementById("city-name").textContent = cityName;
-    document.getElementById("date").textContent = date.toDateString();
-    document.getElementById("weather-icon").src = weatherIcon;
-    document.getElementById("temperature").textContent = `Temperature: ${temperature}°C`;
-    document.getElementById("humidity").textContent = `Humidity: ${humidity}%`;
-    document.getElementById("wind-speed").textContent = `Wind Speed: ${windSpeed} mph`;
-  })
-  .fail((error) => {
-    console.error(`Error retrieving weather data: ${error}`);
-  });
+    .done((weatherData) => {
+      const cityName = weatherData.name;
+      const date = new Date();
+      //const weather = weatherData.weather[0];
+      const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
+      const temperature = weatherData.main.temp;
+      const humidity = weatherData.main.humidity;
+      const windSpeed = weatherData.wind.speed;
+
+      // Update the HTML to display the information
+      document.getElementById("city-name").textContent = cityName;
+      document.getElementById(
+        "date"
+      ).textContent = `( ${date.toDateString()} )`;
+      document.getElementById("weather-icon").src = weatherIcon;
+      document.getElementById(
+        "temperature"
+      ).textContent = `Temperature: ${temperature}°C`;
+      document.getElementById(
+        "humidity"
+      ).textContent = `Humidity: ${humidity}%`;
+      document.getElementById(
+        "wind-speed"
+      ).textContent = `Wind Speed: ${windSpeed} mph`;
+    })
+    .fail((error) => {
+      console.error(`Error retrieving weather data: ${error}`);
+    });
 };
 
 $(document).ready(function () {
-    $("form").submit(function (event) {
-      event.preventDefault();
-      const city = $("#search-input").val();
+  $("form").submit(function (event) {
+    event.preventDefault();
+    const city = $("#search-input").val();
+    displayWeather(city);
+  });
+});
+
+const displaySearchHistory = (searchHistory) => {
+  // Get a reference to the container for the search history
+  const historyContainer = document.querySelector("#history");
+
+  // Clear any existing search history from the container
+  historyContainer.innerHTML = "";
+
+  // Only show the last 5 items in the search history
+  const limitedHistory = searchHistory.slice(-5);
+
+  // Loop over each item in the search history
+  for (const city of limitedHistory) {
+    // Create a new HTML element for the city
+    const cityElement = document.createElement("a");
+    cityElement.textContent = city;
+    cityElement.classList.add("list-group-item");
+    cityElement.href = "#";
+
+    // Add an event listener to the city element to display the weather when it's clicked
+    cityElement.addEventListener("click", () => {
       displayWeather(city);
     });
-  });
-  
-  const displaySearchHistory = (searchHistory) => {
-    // Get a reference to the container for the search history
-    const historyContainer = document.querySelector("#history");
-  
-    // Clear any existing search history from the container
-    historyContainer.innerHTML = "";
-  
-    // Loop over each item in the search history
-    for (const city of searchHistory) {
-      // Create a new HTML element for the city
-      const cityElement = document.createElement("a");
-      cityElement.textContent = city;
-      cityElement.classList.add("list-group-item");
-      cityElement.href = "#";
-  
-      // Add an event listener to the city element to display the weather when it's clicked
-      cityElement.addEventListener("click", () => {
-        displayWeather(city);
-      });
-  
-      // Append the city element to the history container
-      historyContainer.appendChild(cityElement);
-    }
-  };
-  // Retrieve the search history from local storage
-  const searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || []; //if the search history does not exist, an empty array is assigned
-  displaySearchHistory(searchHistory);
 
-  
+    // Append the city element to the history container
+    historyContainer.appendChild(cityElement);
+  }
+};
+// Retrieve the search history from local storage
+const searchHistory = JSON.parse(localStorage.getItem("searchHistory")) || []; //if the search history does not exist, an empty array is assigned
+displaySearchHistory(searchHistory);
