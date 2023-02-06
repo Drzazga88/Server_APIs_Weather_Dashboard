@@ -1,6 +1,8 @@
 var API_Key = "5111297b359fd6c2201ce081633e2699";
 var API_URL = `https://api.openweathermap.org/data/2.5/weather?appid=${API_Key}&units=metric`;
+var API_URL_FORECAST = `https://api.openweathermap.org/data/2.5/forecast?appid=${API_Key}&units=metric`;
 
+// Current day weather
 const getWeather = (city) => {
   return $.ajax({
     url: `${API_URL}&q=${city}`,
@@ -22,7 +24,6 @@ const displayWeather = (city) => {
     .done((weatherData) => {
       const cityName = weatherData.name;
       const date = new Date();
-      //const weather = weatherData.weather[0];
       const weatherIcon = `http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`;
       const temperature = weatherData.main.temp;
       const humidity = weatherData.main.humidity;
@@ -49,6 +50,7 @@ const displayWeather = (city) => {
     });
 };
 
+// Add user input for the city
 $(document).ready(function () {
   $("form").submit(function (event) {
     event.preventDefault();
@@ -57,11 +59,50 @@ $(document).ready(function () {
   });
 });
 
+// Data for 5 days forecast
+const getForecast = (city) => {
+  return $.ajax({
+    url: `${API_URL_FORECAST}&q=${city}`,
+    method: "GET",
+  });
+};
+
+// const dateOne = moment().add(1, 'days').format('L');
+// document.querySelector("#day1-date").innerHTML = dateOne;
+
+// Call the API and retrieve the data
+fetch(
+  `https://api.openweathermap.org/data/2.5/forecast?q=city&appid=5111297b359fd6c2201ce081633e2699`
+)
+  .then((response) => response.json())
+  .then((data) => {
+    // Populate the values for the 5-day forecast
+    for (let i = 1; i <= 5; i++) {
+      const forecast = data.list[i * 8];
+      document.querySelector(`#day${i}-date`).innerHTML = new Date(
+        forecast.dt * 1000
+      ).toDateString();
+      document.querySelector(
+        `#day${i}-icon`
+      ).src = `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
+      document.querySelector(
+        `#day${i}-temp`
+      ).innerHTML = `Temperature: ${forecast.main.temp} °C`;
+      document.querySelector(
+        `#day${i}-hum`
+      ).innerHTML = `Humidity: ${forecast.main.humidity}%`;
+      document.querySelector(
+        `#day${i}-wind`
+      ).innerHTML = `Wind Speed: ${forecast.wind.speed} m/s`;
+    }
+  })
+  .catch((error) => console.error(error));
+
 const displaySearchHistory = (searchHistory) => {
-  // Get a reference to the container for the search history
+  // A reference for the search history
   const historyContainer = document.querySelector("#history");
 
-  // Clear any existing search history from the container
+  // Clear any existing search history from the history
   historyContainer.innerHTML = "";
 
   // Only show the last 5 items in the search history
