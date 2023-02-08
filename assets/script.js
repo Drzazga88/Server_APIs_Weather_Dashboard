@@ -69,34 +69,31 @@ const getForecast = (city) => {
 
 // const dateOne = moment().add(1, 'days').format('L');
 // document.querySelector("#day1-date").innerHTML = dateOne;
+$("form").submit(function (event) {
+    event.preventDefault();
+    const city = $("#search-input").val();
+    displayWeather(city);
 
 // Call the API and retrieve the data
 fetch(
-  `https://api.openweathermap.org/data/2.5/forecast?q=city&appid=5111297b359fd6c2201ce081633e2699`
+  `https://api.openweathermap.org/data/2.5/forecast?q=${city}&units=metric&appid=${API_Key}`
 )
   .then((response) => response.json())
   .then((data) => {
     // Populate the values for the 5-day forecast
+    console.error("Data from API: ", data);
     for (let i = 1; i <= 5; i++) {
-      const forecast = data.list[i * 8];
-      document.querySelector(`#day${i}-date`).innerHTML = new Date(
-        forecast.dt * 1000
-      ).toDateString();
-      document.querySelector(
-        `#day${i}-icon`
-      ).src = `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
-      document.querySelector(
-        `#day${i}-temp`
-      ).innerHTML = `Temperature: ${forecast.main.temp} °C`;
-      document.querySelector(
-        `#day${i}-hum`
-      ).innerHTML = `Humidity: ${forecast.main.humidity}%`;
-      document.querySelector(
-        `#day${i}-wind`
-      ).innerHTML = `Wind Speed: ${forecast.wind.speed} m/s`;
+      const forecast = data.list[i];
+      console.log("Forecast data: ", forecast);
+      document.querySelector(`#day${i}-date`).innerHTML = new Date(forecast.dt * 1000).toDateString();
+      document.querySelector(`#day${i}-icon`).src = `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
+      document.querySelector(`#day${i}-temp`).innerHTML = `Temperature: ${forecast.main.temp} °C`;
+      document.querySelector(`#day${i}-hum`).innerHTML = `Humidity: ${forecast.main.humidity}%`;
+      document.querySelector(`#day${i}-wind`).innerHTML = `Wind Speed: ${forecast.wind.speed} m/s`;
     }
   })
   .catch((error) => console.error(error));
+});
 
 const displaySearchHistory = (searchHistory) => {
   // A reference for the search history
