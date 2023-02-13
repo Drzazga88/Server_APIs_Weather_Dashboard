@@ -42,21 +42,21 @@ $(document).ready(function () {
       });
     }
     function showWeather(city) {
-      const API_URL = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+      const API_URL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
 
       // Retrieve geographical coordinates given a city name
       $.get(API_URL, function (data) {
         console.log(data); // control step
         const lat = data.coord.lat;
         const lon = data.coord.lon;
-        const API_URL_COORD = `http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+        const API_URL_COORD = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
 
         // Retrieve required weather data from API
         $.get(API_URL_COORD, function (coordData) {
           console.log(coordData); // control step
           const cityName = coordData.name;
           const date = new Date();
-          const weatherIcon = `http://openweathermap.org/img/wn/${coordData.weather[0].icon}@2x.png`;
+          const weatherIcon = `https://openweathermap.org/img/wn/${coordData.weather[0].icon}@2x.png`;
           const temperature = coordData.main.temp;
           const humidity = coordData.main.humidity;
           const windSpeed = coordData.wind.speed;
@@ -86,14 +86,14 @@ $(document).ready(function () {
           ).textContent = `Wind Speed: ${windSpeed} mph`;
 
           // Forecast data fetch from API
-          const API_URL_FORECAST = `http://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
+          const API_URL_FORECAST = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`;
           $.get(API_URL_FORECAST, function (forecastData) {
             console.log(forecastData); // control step
             // Loop to retrieve data for 5 days weather forecast from API
             for (let i = 7; i < forecastData.list.length; i += 8) {
               const forecast = forecastData.list[i];
               const forecastDate = new Date(forecast.dt * 1000);
-              const forecastWeatherIcon = `http://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
+              const forecastWeatherIcon = `https://openweathermap.org/img/wn/${forecast.weather[0].icon}@2x.png`;
               const forecastTemperature = forecast.main.temp;
               const forecastHumidity = forecast.main.humidity;
               const forecastWind = forecast.wind.speed;
