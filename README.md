@@ -28,7 +28,7 @@ This app is a weather dashboard that will run in the browser and feature dynamic
 
 [Weather Dashboard.webm](https://user-images.githubusercontent.com/119010465/218476902-5c06fbaa-003b-4a35-8b22-333920ad0919.webm)
 
-[Deployed website](https://drzazga88.github.io/Server_APIs_Weather_Dashboard/#)
+[Deployed website](https://drzazga88.github.io/Server_APIs_Weather_Dashboard/)
 
 ### License
 Check License file.
