@@ -24,9 +24,9 @@ This app is a weather dashboard that will run in the browser and feature dynamic
 
 - When a user clicks on a city in the search history they are again presented with current and future conditions for that city.
 
-## Current issues
-- Search history updates only after page refresh.
-- 5-days forecast is not working yet as expected.
+## Website demo
+
+[Weather Dashboard.webm](https://user-images.githubusercontent.com/119010465/218476902-5c06fbaa-003b-4a35-8b22-333920ad0919.webm)
 
 [Deployed website](https://drzazga88.github.io/Server_APIs_Weather_Dashboard/#)
 
